@@ -6,7 +6,7 @@ const SalidaTokens = ({salida}) => {
       <h4>Tokens</h4>
       {
         salida.map(item=>
-          <div className={styles.salida}>
+          <div className={styles.salida} key={`token: ${item.from}-${item.value}`}>
             <ul>
               <li><b>Type:</b> {item.type}</li>
               <li><b>Value:</b> {item.value}</li>

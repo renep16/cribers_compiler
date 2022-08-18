@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import tokens from '../../lib/analizador_lexico';
+import make_parse from '../../lib/parser';
 import SalidaTokens from '../SalidaTokens/SalidaTokens';
 import styles from './HomeInput.module.css'
 
@@ -8,16 +9,31 @@ const HomeInput = () => {
   const [errorS, setError] = useState(null)
 
   const [salida, setSalida] = useState(null)
+  const [salidaTree, setSalidaTree] = useState(null)
 
   const compilar = () => {
     setSalida(null)
     setError(null)
+
+    var string, tree;
     try {
       setSalida(tokens(code))
+      const parser = make_parse()
+
+      tree = parser(code);
+      string = JSON.stringify(tree, ['key', 'name', 'message',
+        'value', 'arity', 'first', 'second', 'third', 'fourth'], 6);
+
+
     }
     catch (e) {
       setError(e)
+      string = JSON.stringify(e, ['name', 'message', 'from', 'to', 'key',
+        'value', 'arity', 'first', 'second', 'third', 'fourth'], 6);
     }
+    const html = string.replace(/&/g, '&amp;').replace(/[<]/g, '&lt;');
+    // console.log(html)
+    setSalidaTree(html)
   }
 
   const checkTab = (e) => {
@@ -47,12 +63,22 @@ const HomeInput = () => {
       </textarea>
 
       <button className="button" onClick={compilar}>Compile</button>
+      <div className={styles.homeResult}>
+        {salida && <SalidaTokens salida={salida} />}
+        {salidaTree &&
 
-      {salida && <SalidaTokens salida={salida} />}
+          <div>
+            <h4>Arbol de parsing</h4>
+            <pre>
+              {salidaTree}
+            </pre>
+          </div>
+        }
+      </div>
 
       <div>
         <pre>
-          {errorS && errorS}
+          {/* {errorS && errorS} */}
         </pre>
       </div>
     </div>

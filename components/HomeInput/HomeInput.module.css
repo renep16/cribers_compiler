@@ -13,3 +13,12 @@
   border-radius: 10px;
   border: 2px solid #0070f3;
 }
+
+.homeResult{
+  width: 100%;
+  display: flex;
+  padding: 1rem;
+  text-align: left;
+}
+
+.homeResult > * {width: 50%;}

@@ -58,6 +58,10 @@ const HomeInput = () => {
         onChange={(e) => setCode(e.target.value)}
         onKeyDown={checkTab}
         className={styles.textArea}
+        placeholder={`pasos 10
+girar 45
+pasos 5
+saltar`}
       >
 
       </textarea>

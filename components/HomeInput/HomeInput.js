@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import tokens from '../../lib/analizador_lexico';
 import make_parse from '../../lib/parser';
+import { compiler } from '../../lib/tiny-compiler';
 import SalidaTokens from '../SalidaTokens/SalidaTokens';
 import styles from './HomeInput.module.css'
 
@@ -17,23 +18,28 @@ const HomeInput = () => {
 
     var string, tree;
     try {
-      setSalida(tokens(code))
-      const parser = make_parse()
+      const tokens1 = tokens(code + "\n");
+      setSalida(tokens1)
+      // const parser = make_parse()
 
-      tree = parser(code);
-      string = JSON.stringify(tree, ['key', 'name', 'message',
-        'value', 'arity', 'first', 'second', 'third', 'fourth'], 6);
+      // tree = parser(code);
+      // string = JSON.stringify(tree, ['key', 'name', 'message',
+      //   'value', 'arity', 'first', 'second', 'third', 'fourth'], 6);
 
-
+      const sal = compiler(tokens1)
+      // setSalida(sal)
+      console.log(sal)
     }
     catch (e) {
       setError(e)
       string = JSON.stringify(e, ['name', 'message', 'from', 'to', 'key',
         'value', 'arity', 'first', 'second', 'third', 'fourth'], 6);
+      console.log(e)
     }
-    const html = string.replace(/&/g, '&amp;').replace(/[<]/g, '&lt;');
-    // console.log(html)
-    setSalidaTree(html)
+    // const html = string.replace(/&/g, '&amp;').replace(/[<]/g, '&lt;');
+
+    // setSalidaTree(html)
+
   }
 
   const checkTab = (e) => {
@@ -69,7 +75,7 @@ saltar`}
       <button className="button" onClick={compilar}>Compile</button>
       <div className={styles.homeResult}>
         {salida && <SalidaTokens salida={salida} />}
-        {salidaTree &&
+        {/*{salidaTree &&
 
           <div>
             <h4>Arbol de parsing</h4>
@@ -77,12 +83,13 @@ saltar`}
               {salidaTree}
             </pre>
           </div>
-        }
+        } */}
       </div>
 
       <div>
         <pre>
           {/* {errorS && errorS} */}
+          {/* {salida} */}
         </pre>
       </div>
     </div>

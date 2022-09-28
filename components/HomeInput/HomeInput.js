@@ -14,13 +14,16 @@ const HomeInput = () => {
 
   const [salidaFinal, setFinal] = useState(null)
 
-  const compilar = () => {
+  const compilar = (valor) => {
+
+    // if (!(new Boolean(valor))) return
     setSalida(null)
     setError(null)
 
     var string, tree;
     try {
-      const tokens1 = tokens(code + "\n");
+      const value = valor || code
+      const tokens1 = tokens(value + "\n");
       setSalida(tokens1)
       const tree = parser(tokens1)
       console.log(tree)
@@ -37,11 +40,13 @@ const HomeInput = () => {
       setFinal(sal)
     }
     catch (e) {
-      setError(e)
+      console.log(e)
+      setFinal(null)
+
+      setError(e.message || e)
       string = ""
       // string = JSON.stringify(e, ['name', 'message', 'from', 'to', 'key',
       //   'value', 'arity', 'first', 'second', 'third', 'fourth'], 6);
-      console.log(e)
     }
     console.log(string)
     const html = string.replace(/&/g, '&amp;').replace(/[<]/g, '&lt;');
@@ -69,8 +74,9 @@ const HomeInput = () => {
     <div className={styles.homeInput}>
       <textarea
         value={code}
-        onChange={(e) => setCode(e.target.value)}
+        onChange={(e) => { setCode(e.target.value); }}
         onKeyDown={checkTab}
+        onKeyUp={(e) => compilar(e.target.value)}
         className={styles.textArea}
         placeholder={`pasos 10
 girar 45
@@ -80,10 +86,10 @@ saltar`}
 
       </textarea>
 
-      <button className="button" onClick={compilar}>Compile</button>
+      <button className="button" onClick={() => compilar(code)}>Compile</button>
       <div className={styles.homeResult}>
-        {salida && <SalidaTokens salida={salida} />}
-        {salidaTree &&
+        {salida && !errorS && <SalidaTokens salida={salida} />}
+        {salidaTree && !errorS &&
 
           <div>
             <h4>Arbol de parsing</h4>
@@ -93,14 +99,14 @@ saltar`}
           </div>
         }
       </div>
+      {errorS && errorS}
 
-      <div>
+      {!errorS && salidaFinal && <div>
         <h2>Compilado</h2>
         <pre>
-          {/* {errorS && errorS} */}
           {salidaFinal}
         </pre>
-      </div>
+      </div>}
     </div>
   );
 }

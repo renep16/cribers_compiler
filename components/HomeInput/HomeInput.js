@@ -29,14 +29,9 @@ const HomeInput = () => {
       console.log(tree)
       string = JSON.stringify(tree, ['body', 'type', 'params', "name", "value"], 2)
 
-      // const parser = make_parse()
-
-      // tree = parser(code);
-      // string = JSON.stringify(tree, ['key', 'name', 'message',
-      //   'value', 'arity', 'first', 'second', 'third', 'fourth'], 6);
 
       const sal = compiler(tokens1)
-      // setSalida(sal)
+
       setFinal(sal)
     }
     catch (e) {
@@ -45,8 +40,7 @@ const HomeInput = () => {
 
       setError(e.message || e)
       string = ""
-      // string = JSON.stringify(e, ['name', 'message', 'from', 'to', 'key',
-      //   'value', 'arity', 'first', 'second', 'third', 'fourth'], 6);
+
     }
     console.log(string)
     const html = string.replace(/&/g, '&amp;').replace(/[<]/g, '&lt;');
